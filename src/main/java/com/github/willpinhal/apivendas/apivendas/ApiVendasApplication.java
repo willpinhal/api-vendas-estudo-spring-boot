@@ -35,14 +35,38 @@ public class ApiVendasApplication {
 		return args -> {
 			this.animal.fazerBarulho();
 
+			System.out.println("Salvando clientes");
 			clientesRepository.salvar(new Cliente(null, "Maria Clara"));
 			clientesRepository.salvar(new Cliente(null, "William Lucio de Souza"));
 			clientesRepository.salvar(new Cliente(null, "Lucas"));
 			clientesRepository.salvar(new Cliente(null, "Polyana"));
 
+			System.out.println("Obtendo todos clientes");
 			List<Cliente> clienteList =clientesRepository.obterTodos();
+			clienteList.forEach(System.out::println);
+
+			System.out.println("Atualizando todos clientes");
+			clienteList.forEach(c -> {
+				c.setNome(c.getNome() + " - atualizado");
+				clientesRepository.atualizar(c);
+			});
 
 			clienteList.forEach(System.out::println);
+
+			System.out.println("Obetendo clientes por filtro");
+			clientesRepository.buscarPorNome("Lu").forEach(System.out::println);
+
+			System.out.println("Deletando clientes");
+			clientesRepository.obterTodos().forEach(c -> clientesRepository.deletar(c));
+
+			System.out.println("Obtendo todos clientes");
+			clienteList = clientesRepository.obterTodos();
+
+			if (clienteList.size() == 0){
+				System.out.println("Nenhum cliente encontrado!");
+			}
+
+
 		};
 	}
 

@@ -15,21 +15,43 @@ public class ClienteRepository {
 
     private static String INSERT = "insert into cliente (nome) values (?) ";
     private static String SELECT_ALL = "select * from cliente ";
-
+    private static String UPDATE = "update cliente set nome = ? where id = ? ";
+    private static String DELETE = "delete from cliente where where 1d = ? ";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Cliente salvar(Cliente cliente){
+    public Cliente salvar(Cliente cliente) {
         jdbcTemplate.update(INSERT, new Object[]{cliente.getNome()});
         return cliente;
     }
 
-    public List<Cliente> obterTodos(){
-       return jdbcTemplate.query(SELECT_ALL, new RowMapper<Cliente>() {
-           @Override
-           public Cliente mapRow(ResultSet rs, int rowNum) throws SQLException {
-               return new Cliente(rs.getInt("id"), rs.getString("nome"));
-           }
-       });
+    public Cliente atualizar(Cliente cliente) {
+        jdbcTemplate.update(UPDATE, new Object[]{cliente.getNome(), cliente.getId()});
+        return cliente;
+    }
+
+    public void deletar(Integer id) {
+        jdbcTemplate.update(DELETE, new Object[]{id});
+    }
+
+    public void deletar(Cliente cliente) {
+        deletar(cliente.getId());
+    }
+
+    public List<Cliente> obterTodos() {
+        return jdbcTemplate.query(SELECT_ALL, getMapper());
+    }
+
+    public List<Cliente> buscarPorNome(String nome) {
+        return jdbcTemplate.query(SELECT_ALL.concat(" where nome like ? "), new Object[]{"%" + nome + "%"}, getMapper());
+    }
+
+    private RowMapper<Cliente> getMapper() {
+        return new RowMapper<Cliente>() {
+            @Override
+            public Cliente mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Cliente(rs.getInt("id"), rs.getString("nome"));
+            }
+        };
     }
 }
