@@ -16,7 +16,7 @@ public class ClienteRepository {
     private static String INSERT = "insert into cliente (nome) values (?) ";
     private static String SELECT_ALL = "select * from cliente ";
     private static String UPDATE = "update cliente set nome = ? where id = ? ";
-    private static String DELETE = "delete from cliente where where 1d = ? ";
+    private static String DELETE = "delete from cliente where id = ? ";
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
