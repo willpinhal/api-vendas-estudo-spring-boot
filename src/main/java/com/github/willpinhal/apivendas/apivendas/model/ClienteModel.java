@@ -1,12 +1,12 @@
 package com.github.willpinhal.apivendas.apivendas.model;
 
-public class Cliente {
+public class ClienteModel {
 
-    public Cliente() {
+    public ClienteModel() {
 
     }
 
-    public Cliente(Integer id, String nome) {
+    public ClienteModel(Integer id, String nome) {
         this.id = id;
         this.nome = nome;
     }

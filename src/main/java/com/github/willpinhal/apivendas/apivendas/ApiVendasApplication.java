@@ -1,7 +1,8 @@
 package com.github.willpinhal.apivendas.apivendas;
 
+import com.github.willpinhal.apivendas.apivendas.domain.entity.Cliente;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ClienteRepository;
-import com.github.willpinhal.apivendas.apivendas.model.Cliente;
+import com.github.willpinhal.apivendas.apivendas.model.ClienteModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
