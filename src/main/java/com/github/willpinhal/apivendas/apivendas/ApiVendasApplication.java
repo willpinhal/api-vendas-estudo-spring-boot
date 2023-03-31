@@ -37,37 +37,20 @@ public class ApiVendasApplication {
 			this.animal.fazerBarulho();
 
 			System.out.println("Salvando clientes");
-			clientesRepository.salvar(new Cliente(null, "Maria Clara"));
-			clientesRepository.salvar(new Cliente(null, "William Lucio de Souza"));
-			clientesRepository.salvar(new Cliente(null, "Lucas"));
-			clientesRepository.salvar(new Cliente(null, "Polyana"));
+			clientesRepository.save(new Cliente(null, "Maria Clara"));
+			clientesRepository.save((new Cliente(null, "William Lucio de Souza")));
+			clientesRepository.save((new Cliente(null, "Lucas")));
+			clientesRepository.save((new Cliente(null, "Polyana")));
 
-			System.out.println("Obtendo todos clientes");
-			List<Cliente> clienteList =clientesRepository.obterTodos();
-			clienteList.forEach(System.out::println);
+			String nome = "Polyana";
 
-			System.out.println("Atualizando todos clientes");
-			clienteList.forEach(c -> {
-				c.setNome(c.getNome() + " - atualizado");
-				clientesRepository.atualizar(c);
-			});
-
-			clienteList.forEach(System.out::println);
-
-			System.out.println("Obetendo clientes por filtro");
-			clientesRepository.buscarPorNome("Lu").forEach(System.out::println);
-
-			System.out.println("Deletando clientes");
-			clientesRepository.obterTodos().forEach(c -> clientesRepository.deletar(c));
-
-			System.out.println("Obtendo todos clientes");
-			clienteList = clientesRepository.obterTodos();
-
-			if (clienteList.size() == 0){
+			System.out.println(String.format("Existe cliente com o nome %s?", nome));
+			if (clientesRepository.existsByNome(nome)){
+				System.out.println("Cliente encontrado!");
+			}
+			else {
 				System.out.println("Nenhum cliente encontrado!");
 			}
-
-
 		};
 	}
 
