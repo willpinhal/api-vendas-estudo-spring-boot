@@ -1,6 +1,7 @@
 package com.github.willpinhal.apivendas.apivendas.domain.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Cliente {
@@ -21,6 +22,13 @@ public class Cliente {
 
     @Column(name = "nome", length = 100)
     private String nome;
+
+    @OneToMany(mappedBy = "cliente")
+    private Set<Pedido> pedidos;
+
+    public Set<Pedido> getPedidos() {
+        return pedidos;
+    }
 
     public Integer getId() {
         return id;
