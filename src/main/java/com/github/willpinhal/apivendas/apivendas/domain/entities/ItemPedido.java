@@ -1,4 +1,4 @@
-package com.github.willpinhal.apivendas.apivendas.domain.entity;
+package com.github.willpinhal.apivendas.apivendas.domain.entities;
 
 import javax.persistence.*;
 
