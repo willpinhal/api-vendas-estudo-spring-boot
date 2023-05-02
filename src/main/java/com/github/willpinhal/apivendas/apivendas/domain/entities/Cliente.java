@@ -1,5 +1,7 @@
 package com.github.willpinhal.apivendas.apivendas.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -23,7 +25,10 @@ public class Cliente {
     @Column(name = "nome", length = 100)
     private String nome;
 
-    @OneToMany(mappedBy = "cliente")
+    @Column(name = "cpf", length = 11)
+    private String cpf;
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Pedido> pedidos;
 
     public Set<Pedido> getPedidos() {
@@ -46,11 +51,20 @@ public class Cliente {
         this.nome = nome;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     @Override
     public String toString() {
         return "Cliente{" +
                 "id='" + id + '\'' +
                 "nome='" + nome + '\'' +
+                "cpf='" + cpf + '\'' +
                 '}';
     }
 }
