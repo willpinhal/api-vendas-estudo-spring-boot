@@ -1,2 +1,10 @@
-package com.github.willpinhal.apivendas.apivendas.dto;public class ItemPedidoDTO {
+package com.github.willpinhal.apivendas.apivendas.dto;
+
+import lombok.Data;
+
+@Data
+public class ItemPedidoDTO {
+
+    private Integer produto;
+    private Integer quantidade;
 }

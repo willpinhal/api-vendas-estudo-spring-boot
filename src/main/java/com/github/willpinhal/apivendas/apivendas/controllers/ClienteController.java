@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
@@ -20,7 +20,6 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @GetMapping("/{id}")
-    @ResponseBody
     public ResponseEntity<Cliente> getClienteByID(@PathVariable Integer id) {
         Optional<Cliente> optionalCliente = clienteRepository.findById(id);
 
@@ -32,14 +31,12 @@ public class ClienteController {
     }
 
     @PostMapping()
-    @ResponseBody
     public ResponseEntity save(@RequestBody Cliente cliente) {
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return ResponseEntity.ok(clienteSalvo);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseBody
     public ResponseEntity delete(@PathVariable Integer id) {
 
         Optional<Cliente> optionalCliente = clienteRepository.findById(id);
@@ -55,18 +52,17 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    @ResponseBody
     public ResponseEntity update(@PathVariable Integer id, @RequestBody Cliente cliente) {
 
         return clienteRepository.findById(id).map(clienteExistente -> {
             cliente.setId(clienteExistente.getId());
             clienteRepository.save(cliente);
             return ResponseEntity.noContent().build();
-        }).orElseGet(() -> ResponseEntity.noContent().build());
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping()
-    public ResponseEntity find(@RequestBody Cliente cliente) {
+    public ResponseEntity find(Cliente cliente) {
 
         ExampleMatcher exampleMatcher = ExampleMatcher
                 .matching()
