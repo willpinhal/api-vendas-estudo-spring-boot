@@ -8,6 +8,7 @@ import com.github.willpinhal.apivendas.apivendas.domain.repositories.ClienteRepo
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ItemPedidoRepository;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.PedidoRepository;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ProdutoRepository;
+import com.github.willpinhal.apivendas.apivendas.dto.InformacoesPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.ItemPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.PedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.exceptions.RegraNegocioException;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,11 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setItems(itemPedidoList);
 
         return pedido;
+    }
+
+    @Override
+    public Optional<Pedido> obterPedidoCompleto(int idPedido) {
+        return pedidoRepository.findById(idPedido);
     }
 
     private List<ItemPedido> converterItemsPedidos(Pedido pedido, List<ItemPedidoDTO> pedidoDTOList){
