@@ -1,6 +1,7 @@
 package com.github.willpinhal.apivendas.apivendas.Services;
 
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Pedido;
+import com.github.willpinhal.apivendas.apivendas.domain.enums.StatusPedido;
 import com.github.willpinhal.apivendas.apivendas.dto.InformacoesPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.PedidoDTO;
 
@@ -10,5 +11,7 @@ public interface PedidoService {
 
     Pedido salvar(PedidoDTO pedidoDTO);
 
-    Optional<Pedido> obterPedidoCompleto(int idPedido);
+    Optional<Pedido> obterPedidoCompleto(int id);
+
+    void atualizaStatus(int id, StatusPedido statusPedido);
 }

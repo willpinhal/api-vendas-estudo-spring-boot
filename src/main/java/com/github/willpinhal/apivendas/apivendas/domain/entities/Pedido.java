@@ -1,5 +1,6 @@
 package com.github.willpinhal.apivendas.apivendas.domain.entities;
 
+import com.github.willpinhal.apivendas.apivendas.domain.enums.StatusPedido;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,9 @@ public class Pedido {
 
     @Column(name = "total")
     private BigDecimal totalPedido;
+
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> items;

@@ -21,6 +21,8 @@ public class InformacoesPedidoDTO {
 
     private BigDecimal total;
 
+    private String status;
+
     private String dataPedido;
 
     private List<InformacoesItemPedidoDTO> items;
@@ -33,6 +35,7 @@ public class InformacoesPedidoDTO {
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .total(pedido.getTotalPedido())
+                .status(pedido.getStatus().name())
                 .items(InformacoesItemPedidoDTO.converteListItensPedidosEmDTOs(pedido.getItems()))
                 .build();
     }

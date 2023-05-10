@@ -2,6 +2,8 @@ package com.github.willpinhal.apivendas.apivendas.controllers;
 
 import com.github.willpinhal.apivendas.apivendas.Services.PedidoService;
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Pedido;
+import com.github.willpinhal.apivendas.apivendas.domain.enums.StatusPedido;
+import com.github.willpinhal.apivendas.apivendas.dto.AtualizacaoStatusPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.InformacoesPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.PedidoDTO;
 import org.springframework.http.HttpStatus;
@@ -31,5 +33,11 @@ public class PedidoController {
                 .obterPedidoCompleto(id)
                 .map(p -> InformacoesPedidoDTO.convertePedidosEmDto(p))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado."));
+    }
+
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateStatus(@PathVariable int id, @RequestBody AtualizacaoStatusPedidoDTO statusPedidoDTO){
+        pedidoService.atualizaStatus(id, StatusPedido.valueOf(statusPedidoDTO.getNovoStatus()));
     }
 }

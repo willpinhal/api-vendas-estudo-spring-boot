@@ -4,16 +4,16 @@ import com.github.willpinhal.apivendas.apivendas.domain.entities.Cliente;
 import com.github.willpinhal.apivendas.apivendas.domain.entities.ItemPedido;
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Pedido;
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Produto;
+import com.github.willpinhal.apivendas.apivendas.domain.enums.StatusPedido;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ClienteRepository;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ItemPedidoRepository;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.PedidoRepository;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ProdutoRepository;
-import com.github.willpinhal.apivendas.apivendas.dto.InformacoesPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.ItemPedidoDTO;
 import com.github.willpinhal.apivendas.apivendas.dto.PedidoDTO;
+import com.github.willpinhal.apivendas.apivendas.exceptions.PedidoNaoEncontradoException;
 import com.github.willpinhal.apivendas.apivendas.exceptions.RegraNegocioException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +43,7 @@ public class PedidoServiceImpl implements PedidoService {
         Cliente cliente = clienteRepository.findById(idCliente).orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
 
         Pedido pedido = new Pedido();
+        pedido.setStatus(StatusPedido.REALIZADO);
         pedido.setTotalPedido(pedidoDTO.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
@@ -58,8 +59,20 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Optional<Pedido> obterPedidoCompleto(int idPedido) {
-        return pedidoRepository.findById(idPedido);
+    public Optional<Pedido> obterPedidoCompleto(int id) {
+        return pedidoRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void atualizaStatus(int id, StatusPedido statusPedido) {
+
+        pedidoRepository.findById(id).map(p ->
+        {
+            p.setStatus(statusPedido);
+            return pedidoRepository.save(p);
+        }).orElseThrow(() ->new PedidoNaoEncontradoException());
+
     }
 
     private List<ItemPedido> converterItemsPedidos(Pedido pedido, List<ItemPedidoDTO> pedidoDTOList){
