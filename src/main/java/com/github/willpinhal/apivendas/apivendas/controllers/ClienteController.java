@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class ClienteController {
     }
 
     @PostMapping()
-    public ResponseEntity save(@RequestBody Cliente cliente) {
+    public ResponseEntity save(@RequestBody @Valid Cliente cliente) {
         Cliente clienteSalvo = clienteRepository.save(cliente);
         return ResponseEntity.ok(clienteSalvo);
     }

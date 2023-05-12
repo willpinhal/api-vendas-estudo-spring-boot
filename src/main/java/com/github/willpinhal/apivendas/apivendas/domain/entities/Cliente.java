@@ -2,8 +2,10 @@ package com.github.willpinhal.apivendas.apivendas.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
@@ -25,10 +27,14 @@ public class Cliente {
     private Integer id;
 
     @Column(name = "nome", length = 100)
+    @NotEmpty(message = "{campo.cliente-nome.obrigatorio}")
     private String nome;
 
     @Column(name = "cpf", length = 11)
+    @NotEmpty(message = "O campo CPF é obrigatório.")
+    @CPF(message = "Informe um CPF válido.")
     private String cpf;
+
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Pedido> pedidos;
