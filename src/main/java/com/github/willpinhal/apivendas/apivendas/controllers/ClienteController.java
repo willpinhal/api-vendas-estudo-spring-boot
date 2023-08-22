@@ -5,6 +5,7 @@ import com.github.willpinhal.apivendas.apivendas.domain.repositories.ClienteRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +54,8 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity update(@PathVariable Integer id, @RequestBody @Valid Cliente cliente) {
 
         return clienteRepository.findById(id).map(clienteExistente -> {
             cliente.setId(clienteExistente.getId());

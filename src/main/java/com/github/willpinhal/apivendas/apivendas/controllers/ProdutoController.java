@@ -8,6 +8,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @PostMapping
-    public ResponseEntity save(@RequestBody Produto produto){
+    public ResponseEntity save(@RequestBody @Valid Produto produto){
 
         Produto produtoSalvo = produtoRepository.save(produto);
         return ResponseEntity.ok(produtoSalvo);
@@ -38,7 +39,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, @RequestBody Produto produto){
+    public ResponseEntity update(@PathVariable Integer id, @RequestBody @Valid Produto produto){
 
         return produtoRepository.findById(id).map(p -> {
             produto.setId(p.getId());
