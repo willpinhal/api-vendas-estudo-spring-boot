@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/produtos/**").hasRole("ADMIN")
                 .antMatchers("/pedidos/**").hasRole("USER")
                 .and()
-                .formLogin();
+                .httpBasic();
 
         http.headers().frameOptions().disable();
     }
