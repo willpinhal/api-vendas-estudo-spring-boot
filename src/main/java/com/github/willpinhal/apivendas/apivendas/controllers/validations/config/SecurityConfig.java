@@ -44,30 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder())
                 .withUser("fulano")
                 .password(passwordEncoder().encode("123"))
-                .roles("USER");
+                .roles("USER","ADMIN");
         //super.configure(auth);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-//        http
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-//                .antMatchers("/api/v1/clientes/**")
-//                .hasRole("USER")
-//                .antMatchers("/api/v1/produtos/**")
-//                .hasRole("ADMIN")
-//                .antMatchers("/api/v1/pedidos/**")
-//                .hasRole("USER")
-//                //.hasAnyAuthority("MANTER USUARIO")
-//                //.permitAll()
-//                .and()
-//                .formLogin();
-//
-//        http.headers().frameOptions().disable();
-        super.configure(http);
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/clientes/**").hasRole("USER")
+                .antMatchers("/produtos/**").hasRole("ADMIN")
+                .antMatchers("/pedidos/**").hasRole("USER")
+                .and()
+                .formLogin();
+
+        http.headers().frameOptions().disable();
     }
 
 //    @Bean
