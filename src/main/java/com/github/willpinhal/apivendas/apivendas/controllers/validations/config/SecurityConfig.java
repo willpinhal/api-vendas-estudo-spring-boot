@@ -1,5 +1,7 @@
 package com.github.willpinhal.apivendas.apivendas.controllers.validations.config;
 
+import com.github.willpinhal.apivendas.apivendas.Services.UsuarioServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,6 +17,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    UsuarioServiceImpl usuarioService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -40,12 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder())
-                .withUser("fulano")
-                .password(passwordEncoder().encode("123"))
-                .roles("USER","ADMIN");
+//        auth.inMemoryAuthentication()
+//                .passwordEncoder(passwordEncoder())
+//                .withUser("fulano")
+//                .password(passwordEncoder().encode("123"))
+//                .roles("USER","ADMIN");
         //super.configure(auth);
+
+        auth.userDetailsService(usuarioService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -58,6 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clientes/**").hasRole("USER")
                 .antMatchers("/produtos/**").hasRole("ADMIN")
                 .antMatchers("/pedidos/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST,"/usuarios/**")
+                .permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic();
 
