@@ -1,4 +1,4 @@
-package com.github.willpinhal.apivendas.apivendas;
+package com.github.willpinhal.apivendas.apivendas.security.jwt;
 
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Usuario;
 import io.jsonwebtoken.Claims;

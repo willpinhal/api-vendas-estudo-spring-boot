@@ -1,6 +1,8 @@
 package com.github.willpinhal.apivendas.apivendas.controllers.validations.config;
 
 import com.github.willpinhal.apivendas.apivendas.Services.UsuarioServiceImpl;
+import com.github.willpinhal.apivendas.apivendas.security.jwt.JwtAuthFilter;
+import com.github.willpinhal.apivendas.apivendas.security.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -13,13 +15,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
+// Classe usada para configurar o SpringSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UsuarioServiceImpl usuarioService;
+    private UsuarioServiceImpl usuarioService;
+
+    @Autowired
+    private JwtService jwtService;
+
+
+    @Bean
+    public OncePerRequestFilter jwtFilter(){
+        return new JwtAuthFilter(jwtService, usuarioService);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // Método que realiza a autenticação e insere dentro do SpringSecurity
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder())
@@ -56,6 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // Método que configura as autorizações
     protected void configure(HttpSecurity http) throws Exception {
 
         http
@@ -69,7 +85,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().disable();
     }
