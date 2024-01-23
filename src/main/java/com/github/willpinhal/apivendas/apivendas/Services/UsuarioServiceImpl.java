@@ -2,6 +2,7 @@ package com.github.willpinhal.apivendas.apivendas.Services;
 
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Usuario;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.UsuarioRepository;
+import com.github.willpinhal.apivendas.apivendas.exceptions.SenhaInvalidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,5 +52,15 @@ public class UsuarioServiceImpl implements UserDetailsService {
                 .password(usuario.getSenha())
                 .roles(roles)
                 .build();
+    }
+
+    public UserDetails autenticar(Usuario usuario){
+        UserDetails userCadastrado = loadUserByUsername(usuario.getLogin());
+        boolean isValidPassword = passwordEncoder.matches(usuario.getSenha(), userCadastrado.getPassword());
+
+        if (isValidPassword){
+            return userCadastrado;
+        }
+        throw new SenhaInvalidException();
     }
 }
