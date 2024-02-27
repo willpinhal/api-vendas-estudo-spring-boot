@@ -60,8 +60,8 @@ public class JwtService {
         try {
             Claims claims = obterClaims(token);
             Date dataExpiracao = claims.getExpiration();
-            LocalDateTime data = dataExpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            return LocalDateTime.now().isAfter(data);
+            LocalDateTime dataToken = dataExpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            return !LocalDateTime.now().isAfter(dataToken);
 
         } catch (Exception ex) {
             return false;
