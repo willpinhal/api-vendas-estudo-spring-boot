@@ -2,6 +2,7 @@ package com.github.willpinhal.apivendas.apivendas.controllers;
 
 import com.github.willpinhal.apivendas.apivendas.domain.entities.Cliente;
 import com.github.willpinhal.apivendas.apivendas.domain.repositories.ClienteRepository;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -16,13 +17,22 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
+@Api("API Clientes")
 public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getClienteByID(@PathVariable Integer id) {
+    @ApiOperation("Obter detalhes de um cliente.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Cliente encontrato."),
+            @ApiResponse(code = 404, message = "Cliente não encontrado.")
+    })
+    public ResponseEntity<Cliente> getClienteByID(
+            @PathVariable
+            @ApiParam("Id do cliente.")
+            Integer id) {
         Optional<Cliente> optionalCliente = clienteRepository.findById(id);
 
         if (optionalCliente.isPresent()) {

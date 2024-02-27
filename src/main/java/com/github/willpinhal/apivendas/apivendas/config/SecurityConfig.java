@@ -1,4 +1,4 @@
-package com.github.willpinhal.apivendas.apivendas.controllers.validations.config;
+package com.github.willpinhal.apivendas.apivendas.config;
 
 import com.github.willpinhal.apivendas.apivendas.Services.UsuarioServiceImpl;
 import com.github.willpinhal.apivendas.apivendas.security.jwt.JwtAuthFilter;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public OncePerRequestFilter jwtFilter(){
+    public OncePerRequestFilter jwtFilter() {
         return new JwtAuthFilter(jwtService, usuarioService);
     }
 
@@ -81,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clientes/**").hasRole("USER")
                 .antMatchers("/produtos/**").hasRole("ADMIN")
                 .antMatchers("/pedidos/**").hasRole("USER")
-                .antMatchers(HttpMethod.POST,"/usuarios/**")
+                .antMatchers(HttpMethod.POST, "/usuarios/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -90,6 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().disable();
+    }
+
+    public void configure(WebSecurity security) throws Exception {
+        security.ignoring()
+                .antMatchers("/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configutario/security",
+                        "/swagger-ui.html",
+                        "/webjars/**");
     }
 
 //    @Bean
